@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>PerfumeMatch Pro MAX</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #101010;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+.container {
+  max-width: 650px;
+  margin: auto;
+  background: rgba(0,0,0,0.8);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(255,255,255,.1);
+}
+select, button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  margin: 8px 0;
+  font-size: 16px;
+}
+label {
+  display: block;
+  text-align: left;
+  margin: 5px 0;
+}
+.resultado {
+  background: #1a1a1a;
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #333;
+}
+</style>
+</head>
+<body>
+
+<h1>PerfumeMatch PRO MAX</h1>
+
+<div class="container">
+  <select id="gender">
+    <option value="dama">Dama</option>
+    <option value="caballero">Caballero</option>
+  </select>
+
+  <h3>Selecciona las notas:</h3>
+  <label><input type="checkbox" value="dulce"> Dulce</label>
+  <label><input type="checkbox" value="maderosa"> Amaderada</label>
+  <label><input type="checkbox" value="fresca"> Fresca</label>
+  <label><input type="checkbox" value="floral"> Floral</label>
+  <label><input type="checkbox" value="ambar"> Ámbar</label>
+  <label><input type="checkbox" value="afrutada"> Afrutada</label>
+  <label><input type="checkbox" value="vainilla"> Vainilla</label>
+  <label><input type="checkbox" value="almizcle"> Almizcle</label>
+  <label><input type="checkbox" value="citrica"> Cítrica</label>
+  <label><input type="checkbox" value="especiada"> Especiada</label>
+
+  <button onclick="buscarPerfumes()">Encontrar perfumes</button>
+
+  <div id="results"></div>
+</div>
+
+<script>
+const perfumes = [
+  // DAMA
+  {nombre:'212', genero:'dama', notas:['fresca','floral']},
+  {nombre:'360', genero:'dama', notas:['floral','almizcle']},
+  {nombre:'360 Red', genero:'dama', notas:['afrutada','dulce']},
+  {nombre:'Amor Amor', genero:'dama', notas:['afrutada','dulce']},
+  {nombre:'Ariana Grande', genero:'dama', notas:['dulce','vainilla']},
+  {nombre:'Azalee', genero:'dama', notas:['floral']},
+  {nombre:'Bae Kim Kardashian', genero:'dama', notas:['dulce','ambar']},
+  {nombre:'Bebe', genero:'dama', notas:['afrutada']},
+  {nombre:'Be Delicious DKNY', genero:'dama', notas:['citrica','afrutada']},
+  {nombre:'Bombshell Night', genero:'dama', notas:['dulce','floral']},
+  {nombre:'Bright Crystal', genero:'dama', notas:['floral','fresca']},
+  {nombre:'Candy Prada', genero:'dama', notas:['dulce']},
+  {nombre:'CK One', genero:'dama', notas:['citrica','fresca']},
+  {nombre:'Chanel Nº5', genero:'dama', notas:['floral','almizcle']},
+  {nombre:'Carolina Herrera', genero:'dama', notas:['floral','ambar']},
+  {nombre:'Can Can Paris Hilton', genero:'dama', notas:['dulce','afrutada']},
+  {nombre:'Cloud Ariana Grande', genero:'dama', notas:['dulce','vainilla']},
+  {nombre:'Coco Chanel', genero:'dama', notas:['ambar','especiada']},
+  {nombre:'Cool Water', genero:'dama', notas:['fresca','citrica']},
+  {nombre:'Ed Hardy Woman', genero:'dama', notas:['afrutada']},
+  {nombre:'Eternity', genero:'dama', notas:['floral','fresca']},
+  {nombre:'Eros Versace', genero:'dama', notas:['dulce','ambar']},
+  {nombre:'Fantasy Britney Spears', genero:'dama', notas:['dulce','vainilla']},
+  {nombre:'Flower by Kenzo', genero:'dama', notas:['floral','almizcle']},
+  {nombre:'Halloween', genero:'dama', notas:['vainilla','floral']},
+  {nombre:'Heiress Paris Hilton', genero:'dama', notas:['afrutada']},
+  {nombre:'Killer Queen', genero:'dama', notas:['dulce','afrutada']},
+  {nombre:'La Vie Est Belle', genero:'dama', notas:['vainilla','dulce']},
+  {nombre:'Lacoste Femme', genero:'dama', notas:['floral','maderosa']},
+  {nombre:'Libre YSL', genero:'dama', notas:['ambar','floral']},
+  {nombre:'Light Blue', genero:'dama', notas:['citrica','fresca']},
+  {nombre:'Meow Katy Perry', genero:'dama', notas:['vainilla','dulce']},
+  {nombre:'Musk Joven', genero:'dama', notas:['almizcle']},
+  {nombre:'Ombre Rose', genero:'dama', notas:['floral','almizcle']},
+  {nombre:'Paris Hilton', genero:'dama', notas:['afrutada','dulce']},
+  {nombre:'Perlas Negras', genero:'dama', notas:['ambar','dulce']},
+  {nombre:'Poison', genero:'dama', notas:['especiada','ambar']},
+  {nombre:'Red Door', genero:'dama', notas:['floral','ambar']},
+  {nombre:'Reb'l Fleur Rihanna', genero:'dama', notas:['afrutada','dulce']},
+  {nombre:'RiRi Rihanna', genero:'dama', notas:['dulce','afrutada']},
+  {nombre:'Selena Gomez', genero:'dama', notas:['vainilla','dulce']},
+  {nombre:'Toy 2 Bubble Gum', genero:'dama', notas:['dulce']},
+  {nombre:'Tommy Girl', genero:'dama', notas:['citrica','floral']},
+  {nombre:'Touch Pink Lacoste', genero:'dama', notas:['afrutada']},
+  {nombre:'Vainilla', genero:'dama', notas:['vainilla','dulce']},
+  {nombre:'Viva La Juicy', genero:'dama', notas:['dulce','afrutada']},
+
+  // CABALLERO
+  {nombre:'212 Men', genero:'caballero', notas:['fresca','maderosa']},
+  {nombre:'212 VIP Men', genero:'caballero', notas:['dulce','ambar']},
+  {nombre:'360 Men', genero:'caballero', notas:['fresca']},
+  {nombre:'360 Red Men', genero:'caballero', notas:['especiada']},
+  {nombre:'360 Blue Men', genero:'caballero', notas:['citrica']},
+  {nombre:'Armani Black', genero:'caballero', notas:['maderosa','especiada']},
+  {nombre:'Acqua Di Gio', genero:'caballero', notas:['fresca','citrica']},
+  {nombre:'Acqua Di Gio Absolu', genero:'caballero', notas:['ambar','maderosa']},
+  {nombre:'Animal', genero:'caballero', notas:['maderosa']},
+  {nombre:'Bad Boy', genero:'caballero', notas:['ambar','especiada']},
+  {nombre:'Bulgari', genero:'caballero', notas:['citrica']},
+  {nombre:'CK One', genero:'caballero', notas:['fresca','citrica']},
+  {nombre:'Cool Water', genero:'caballero', notas:['fresca']},
+  {nombre:'Chrome', genero:'caballero', notas:['citrica','fresca']},
+  {nombre:'Dior Sport', genero:'caballero', notas:['fresca']},
+  {nombre:'Euphoria Men', genero:'caballero', notas:['ambar','dulce']},
+  {nombre:'Eternity Men', genero:'caballero', notas:['fresca']},
+  {nombre:'Ferrari Black', genero:'caballero', notas:['maderosa','dulce']},
+  {nombre:'Guess', genero:'caballero', notas:['dulce']},
+  {nombre:'Gucci Guilty', genero:'caballero', notas:['ambar','maderosa']},
+  {nombre:'Hugo Boss', genero:'caballero', notas:['fresca']},
+  {nombre:'Invictus', genero:'caballero', notas:['fresca','ambar']},
+  {nombre:'Lacoste Home', genero:'caballero', notas:['maderosa']},
+  {nombre:'Lacoste Red', genero:'caballero', notas:['frutada']},
+  {nombre:'Mambo Men', genero:'caballero', notas:['dulce','especiada']},
+  {nombre:'Nautica', genero:'caballero', notas:['fresca']},
+  {nombre:'Nautica Voyage', genero:'caballero', notas:['fresca','citrica']},
+  {nombre:'One Million', genero:'caballero', notas:['dulce','especiada']},
+  {nombre:'Paris Hilton Men', genero:'caballero', notas:['fresca']},
+  {nombre:'Polo Sport', genero:'caballero', notas:['fresca']},
+  {nombre:'Polo Black', genero:'caballero', notas:['maderosa']},
+  {nombre:'Polo Blue', genero:'caballero', notas:['fresca']},
+  {nombre:'Polo Red', genero:'caballero', notas:['especiada','dulce']},
+  {nombre:'Sauvage Dior', genero:'caballero', notas:['fresca','especiada']},
+  {nombre:'Sauvage Elixir', genero:'caballero', notas:['ambar','especiada']},
+  {nombre:'Tommy Men', genero:'caballero', notas:['citrica']},
+  {nombre:'Versace Men', genero:'caballero', notas:['maderosa']},
+  {nombre:'Y Yves Saint Laurent', genero:'caballero', notas:['fresca','especiada']}
+];
+
+function buscarPerfumes() {
+  const genero = document.getElementById("gender").value;
+  const notasElegidas = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(n => n.value);
+  const contenedor = document.getElementById("results");
+  contenedor.innerHTML = "";
+
+  let resultados = perfumes.filter(p => 
+    p.genero === genero && notasElegidas.some(n => p.notas.includes(n))
+  );
+
+  resultados = resultados.sort(() => Math.random() - 0.5).slice(0, 3);
+
+  if (resultados.length === 0) {
+    contenedor.innerHTML = "<div class='resultado'>No se encontraron perfumes con esas notas.</div>";
+    return;
+  }
+
+  resultados.forEach(p => {
+    contenedor.innerHTML += `
+      <div class="resultado">
+        <strong>${p.nombre}</strong><br>
+        Notas: ${p.notas.join(", ")}
+      </div>
+    `;
+  });
+}
+</script>
+
+</body>
+</html>
